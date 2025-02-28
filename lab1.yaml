@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  title: Messenger API
+  version: 1.0.0
+  description: Простое API для мессенджера
+paths:
+  /messages:
+    get:
+      summary: Получить все сообщения
+      responses:
+        '200':
+          description: Список сообщений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    msg:
+                      type: string
+              example:
+                - id: 1
+                  msg: "SGVsbG8gd29ybGQh" # Пример сообщения в Base64 (Hello world!)
+                - id: 2
+                  msg: "U29ycnkgY2hhbGxlbmdlIQ==" # Пример сообщения в Base64 (Sorry challenging!)
+    post:
+      summary: Отправить сообщение
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                msg:
+                  type: string
+                  description: Сообщение, закодированное в Base64
+            example:
+              msg: "SGVsbG8gd29ybGQh" # Пример сообщения в Base64 (Hello world!)
+      responses:
+        '201':
+          description: Сообщение отправлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  msg:
+                    type: string
+              example:
+                id: 3
+                msg: "SGVsbG8gd29ybGQh" # Пример отправленного сообщения в Base64 (Hello world!)
+  /messages/{id}:
+    put:
+      summary: Обновить сообщение
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                msg:
+                  type: string
+                  description: Обновленное сообщение, закодированное в Base64
+            example:
+              msg: "Qm9vayBmb3IgdGhpcyBtZXNzYWdlIQ==" # Пример обновленного сообщения в Base64 (Book for this message!)
+      responses:
+        '200':
+          description: Сообщение обновлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  msg:
+                    type: string
+              example:
+                id: 1
+                msg: "Qm9vayBmb3IgdGhpcyBtZXNzYWdlIQ==" # Пример обновленного сообщения в Base64 (Book for this message!)
+    delete:
+      summary: Удалить сообщение
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Сообщение удалено
+  /users:
+    post:
+      summary: Добавить пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Имя пользователя
+                password:
+                  type: string
+                  description: Пароль, закодированный в Base64
+            example:
+              username: "john_doe"
+              password: "cGFzc3dvcmQxMjM=" # Пример пароля в Base64 (password123)
+      responses:
+        '201':
+          description: Пользователь добавлен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+              example:
+                id: 1
+                username: "john_doe"
+  /users/{id}:
+    delete:
+      summary: Удалить пользователя
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Пользователь удален
